@@ -1,70 +1,124 @@
-# Getting Started with Create React App
+# Salon Booking Application — Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is the frontend for the **Salon Booking Application**, built with **React.js**. It provides the user interface for browsing salons, viewing services, booking appointments, making payments, and leaving reviews, communicating with the backend microservices through the API Gateway.
 
-## Available Scripts
+> Looking for the backend? See the [Backend README](./backend-README.md) (or the `backend/` directory).
 
-In the project directory, you can run:
+## Table of Contents
 
-### `npm start`
+- [Overview](#overview)
+- [Tech Stack](#tech-stack)
+- [Features](#features)
+- [State Management](#state-management)
+- [Getting Started](#getting-started)
+- [Project Structure](#project-structure)
+- [Future Improvements](#future-improvements)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Overview
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+The frontend is a single-page React application that consumes REST APIs exposed via the backend's API Gateway. It covers the full user journey — browsing salons by category, viewing available services, booking appointments, making payments, and leaving reviews — with a UI built using Material UI and Tailwind CSS.
 
-### `npm test`
+## Tech Stack
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Framework:** React.js
+- **Routing:** React Router DOM
+- **State Management:** Redux (separate store/slice per backend microservice domain)
+- **API Communication:** Axios
+- **UI Libraries:** Material UI, Tailwind CSS
+- **Image Uploads:** Cloudinary
+- **Cross-Cutting:** CORS (secure communication with backend)
 
-### `npm run build`
+## Features
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Browse salons by category
+- View salon-specific service offerings
+- Book appointments for selected services
+- Make secure payments via Razorpay / Stripe (handled through backend Payment Service)
+- View booking status notifications
+- Leave and view reviews for salon services
+- Upload and manage images via Cloudinary (e.g., salon/service images)
+- Authenticated user flows (login/signup) integrated with backend Keycloak authentication
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## State Management
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Redux is used to manage application state, with state organized per microservice domain to mirror the backend's structure:
 
-### `npm run eject`
+```
+redux/
+├── store.js
+├── booking/
+│   ├── bookingSlice.js
+│   └── bookingActions.js
+├── salon/
+├── category/
+├── salonOffering/
+├── review/
+├── user/
+└── payment/
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+This keeps state predictable and makes it easy to trace a piece of UI state back to the backend service that owns it.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Getting Started
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Prerequisites
+- Node.js (LTS recommended)
+- npm or yarn
+- Backend services running (see [Backend README](./backend-README.md))
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Setup & Run
 
-## Learn More
+```bash
+# Clone the repository
+git clone <repository-url>
+cd salon-booking-application/frontend
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+# Install dependencies
+npm install
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+# Start the development server
+npm start
+```
 
-### Code Splitting
+The app will run on `http://localhost:3000` by default (or as configured).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Environment Variables
 
-### Analyzing the Bundle Size
+Create a `.env` file in the frontend root with variables such as:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```
+REACT_APP_API_BASE_URL=http://localhost:8080
+REACT_APP_CLOUDINARY_CLOUD_NAME=<your-cloudinary-cloud-name>
+REACT_APP_CLOUDINARY_UPLOAD_PRESET=<your-upload-preset>
+```
 
-### Making a Progressive Web App
+> Add a `.env.example` file listing required variables (without actual secrets) for easier onboarding.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Project Structure
 
-### Advanced Configuration
+```
+frontend/
+├── public/
+├── src/
+│   ├── components/        # Reusable UI components
+│   ├── pages/              # Page-level components (routes)
+│   ├── redux/               # Redux store, slices, actions per domain
+│   ├── services/             # Axios API service calls
+│   ├── routes/                # React Router DOM route definitions
+│   ├── App.js
+│   └── index.js
+├── package.json
+└── tailwind.config.js
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Future Improvements
 
-### Deployment
+- Add unit/integration tests (e.g., Jest, React Testing Library)
+- Add loading skeletons and improved error boundaries
+- Implement code-splitting/lazy loading for better performance
+- Add E2E tests (e.g., Cypress/Playwright)
+- Improve accessibility (a11y) across components
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## License
 
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project is for educational/portfolio purposes.
